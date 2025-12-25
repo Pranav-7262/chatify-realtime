@@ -24,16 +24,16 @@ const ChatHeader = () => {
           {/* Avatar Section with Online Indicator */}
           <div className="relative">
             <div className="avatar">
-              <div className="size-10 rounded-full ring-2 ring-base-300 ring-offset-base-100 ring-offset-2">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full ring-2 ring-base-300 ring-offset-base-100 ring-offset-2 overflow-hidden">
                 <img
                   src={selectedUser.profilePic || "/avatar.png"}
                   alt={selectedUser.fullName}
-                  className="object-cover"
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>
             {isOnline && (
-              <span className="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-base-100 rounded-full"></span>
+              <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-base-100 rounded-full"></span>
             )}
           </div>
 
@@ -44,7 +44,7 @@ const ChatHeader = () => {
             </h3>
             <div className="flex items-center gap-1.5">
               <span
-                className={`size-1.5 rounded-full ${
+                className={`w-1.5 h-1.5 rounded-full ${
                   isOnline ? "bg-green-500 animate-pulse" : "bg-base-content/30"
                 }`}
               />

@@ -59,7 +59,7 @@ const MessageInput = () => {
             <img
               src={imagePreview}
               alt="Preview"
-              className="w-20 h-20 object-cover rounded-xl border-2 border-primary shadow-lg"
+              className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 object-cover rounded-xl border-2 border-primary shadow-lg"
             />
             <button
               onClick={removeImage}
@@ -67,7 +67,7 @@ const MessageInput = () => {
               flex items-center justify-center hover:bg-error hover:text-white transition-colors"
               type="button"
             >
-              <X className="size-4" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         </div>

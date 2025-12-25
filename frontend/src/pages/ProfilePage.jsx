@@ -46,7 +46,7 @@ const ProfilePage = () => {
               <img
                 src={selectedImg || authUser.profilePic || "/avatar.png"}
                 alt="Profile"
-                className="size-32 rounded-full object-cover border-4 border-primary/20 shadow-xl transition-all group-hover:brightness-90"
+                className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-primary/20 shadow-xl transition-all group-hover:brightness-90"
               />
               <label
                 htmlFor="avatar-upload"
@@ -60,7 +60,7 @@ const ProfilePage = () => {
                   }
                 `}
               >
-                <Camera className="size-5 text-primary-content" />
+                <Camera className="w-5 h-5 text-primary-content" />
                 <input
                   type="file"
                   id="avatar-upload"
@@ -81,7 +81,7 @@ const ProfilePage = () => {
             <div className="form-control w-full">
               <label className="label">
                 <span className="label-text text-base-content/50 flex items-center gap-2">
-                  <User className="size-4" /> Full Name
+                  <User className="w-4 h-4" /> Full Name
                 </span>
               </label>
               <div className="px-4 py-3 bg-base-200 rounded-xl border border-base-content/5 font-medium">
@@ -92,7 +92,7 @@ const ProfilePage = () => {
             <div className="form-control w-full">
               <label className="label">
                 <span className="label-text text-base-content/50 flex items-center gap-2">
-                  <Mail className="size-4" /> Email Address
+                  <Mail className="w-4 h-4" /> Email Address
                 </span>
               </label>
               <div className="px-4 py-3 bg-base-200 rounded-xl border border-base-content/5 font-medium">
@@ -120,7 +120,7 @@ const ProfilePage = () => {
               <div className="flex items-center justify-between text-sm py-2">
                 <span className="text-base-content/60">Account Status</span>
                 <span className="badge badge-success badge-sm gap-1">
-                  <div className="size-1.5 rounded-full bg-success-content animate-pulse" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-success-content animate-pulse" />
                   Active
                 </span>
               </div>

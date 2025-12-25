@@ -10,6 +10,12 @@ export const useChatStore = create((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+  // UI state
+  mobileSidebarOpen: false,
+  toggleMobileSidebar: () =>
+    set((state) => ({ mobileSidebarOpen: !state.mobileSidebarOpen })),
+  openMobileSidebar: () => set({ mobileSidebarOpen: true }),
+  closeMobileSidebar: () => set({ mobileSidebarOpen: false }),
 
   // internal refs
   _messageHandler: null,
@@ -145,7 +151,8 @@ export const useChatStore = create((set, get) => ({
 
     if (selectedUser) {
       localStorage.setItem("chat-selectedUser", JSON.stringify(selectedUser));
-      set({ selectedUser, messages: [] });
+      // close mobile sidebar when a chat is selected on mobile
+      set({ selectedUser, messages: [], mobileSidebarOpen: false });
       try {
         await get().getMessages(selectedUser._id);
       } catch (err) {

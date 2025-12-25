@@ -2,7 +2,7 @@ import { MessageSquare, MessageCircle, Sparkles } from "lucide-react";
 
 const NoChatSelected = () => {
   return (
-    <div className="w-full flex flex-1 flex-col items-center justify-center p-16 bg-base-100/50 backdrop-blur-sm">
+    <div className="w-full flex flex-1 flex-col items-center justify-center p-8 sm:p-16 bg-base-100/50 backdrop-blur-sm">
       <div className="max-w-md text-center space-y-8">
         {/* Animated Icon Section */}
         <div className="flex justify-center mb-8">
@@ -12,11 +12,11 @@ const NoChatSelected = () => {
 
             {/* Floating Icon Container */}
             <div
-              className="relative w-20 h-20 rounded-3xl bg-primary/10 flex items-center justify-center 
+              className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-primary/10 flex items-center justify-center 
               border border-primary/20 shadow-xl backdrop-blur-md
               animate-[bounce_3s_ease-in-out_infinite] hover:scale-110 transition-transform duration-300"
             >
-              <MessageSquare className="w-10 h-10 text-primary group-hover:rotate-12 transition-transform" />
+              <MessageSquare className="w-8 h-8 sm:w-10 sm:h-10 text-primary group-hover:rotate-12 transition-transform" />
 
               {/* Floating "Micro-icons" for extra detail */}
               <div className="absolute -top-2 -right-2 bg-base-100 p-1.5 rounded-full shadow-lg border border-base-300">

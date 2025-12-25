@@ -85,7 +85,7 @@ const ChatContainer = () => {
               className={`chat ${isSentByMe ? "chat-end" : "chat-start"}`}
             >
               <div className="chat-image avatar">
-                <div className="size-10 rounded-full border border-base-300">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-base-300">
                   <img
                     src={
                       isSentByMe
@@ -93,6 +93,7 @@ const ChatContainer = () => {
                         : selectedUser.profilePic || "/avatar.png"
                     }
                     alt="profile"
+                    className="w-full h-full object-cover rounded-full"
                   />
                 </div>
               </div>
@@ -110,10 +111,12 @@ const ChatContainer = () => {
                   <img
                     src={message.image}
                     alt="Attachment"
-                    className="max-w-[200px] rounded-md"
+                    className="w-full max-w-full sm:max-w-[200px] md:max-w-[300px] rounded-md object-cover"
                   />
                 )}
-                {message.text && <p>{message.text}</p>}
+                {message.text && (
+                  <p className="text-sm sm:text-base">{message.text}</p>
+                )}
               </div>
             </div>
           );
