@@ -94,7 +94,8 @@ export const useChatStore = create((set, get) => ({
       // stop retry after 10s
       setTimeout(() => {
         clearInterval(timer);
-        if (get()._subscribeRetryTimer === timer) set({ _subscribeRetryTimer: null });
+        if (get()._subscribeRetryTimer === timer)
+          set({ _subscribeRetryTimer: null });
       }, 10000);
       set({ _subscribeRetryTimer: timer });
       return;
