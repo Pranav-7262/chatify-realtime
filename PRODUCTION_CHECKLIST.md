@@ -12,9 +12,10 @@ Production checklist and recommended changes
 - For cross-origin deployments (frontend and backend on different domains), use `SameSite: "none"` and `secure: true`.
 - Ensure HTTPS is used in production (browsers block SameSite=none without Secure).
 
-3. CORS & Socket
+3. CORS, Socket & CSP
 
 - `FRONTEND_URL` is used for CORS and socket origins. Make sure it matches deployed frontend domain.
+- If you load images from external hosts (Cloudinary, randomuser.me, etc.), ensure the server's Content Security Policy (`img-src`) allows those HTTPS origins or include a wildcard `https:` if you trust third-party sources. Our server now allows `https:` and `https://res.cloudinary.com` for images by default.
 
 4. Logging & Security
 

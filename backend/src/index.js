@@ -51,7 +51,31 @@ console.log(`FRONTEND_URL=${FRONTEND_URL}`);
 console.log(`BACKEND_URL=${BACKEND_URL}`);
 
 // security & performance middlewares
-app.use(helmet());
+// Configure Helmet with a Content Security Policy tailored for this app.
+// Allow images from self, data URIs, blobs and any HTTPS origins (e.g., Cloudinary, randomuser),
+// and allow websocket connections for real-time features.
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https:"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https:"],
+        imgSrc: [
+          "'self'",
+          "data:",
+          "blob:",
+          "https://res.cloudinary.com",
+          "https:",
+        ],
+        connectSrc: ["'self'", "https:", "ws:", "wss:"],
+        fontSrc: ["'self'", "https:", "data:"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: [],
+      },
+    },
+  })
+);
 app.use(compression());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
