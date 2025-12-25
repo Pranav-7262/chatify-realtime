@@ -82,7 +82,8 @@ app.get("/health", (req, res) => res.status(200).json({ ok: true }));
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  app.get("/*", (req, res) => {
+  // Serve index.html for any route using a regex to avoid path-to-regexp parsing issues in some environments (e.g., Render)
+  app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
   });
 }
