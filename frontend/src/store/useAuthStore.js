@@ -2,9 +2,12 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios.js";
 import { io } from "socket.io-client";
 const BASE_URL =
-  import.meta.env.MODE == "development" ? "http://localhost:5000" : "/";
+  import.meta.env.MODE == "development"
+    ? "http://localhost:5000"
+    : import.meta.env.VITE_API_URL || "/";
 
 import toast from "react-hot-toast";
+import { useChatStore } from "./useChatStore";
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
@@ -22,7 +25,13 @@ export const useAuthStore = create((set, get) => ({
       set({ authUser: res.data });
       // reconnect socket after successful auth restore
       get().connectSocket();
-    } catch (error) {
+      // restore selected chat after auth is restored
+      try {
+        useChatStore.getState().restoreSelectedFromLocalStorage();
+      } catch (err) {
+        console.warn("restoreSelectedFromLocalStorage failed:", err);
+      }
+    } catch {
       set({ authUser: null });
     } finally {
       set({ isCheckingAuth: false });
@@ -61,7 +70,7 @@ export const useAuthStore = create((set, get) => ({
       set({ authUser: null });
       toast.success("Logged out successfully");
       get().disconnectSocket();
-    } catch (error) {
+    } catch {
       toast.error("Error logging out");
     }
   },

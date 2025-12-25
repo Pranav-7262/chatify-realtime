@@ -1,0 +1,22 @@
+# Example Render manifest to deploy this monorepo as a single web service
+# Adjust services and env vars before deploying
+services:
+  - type: web
+    name: chat-app
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: "npm run build"
+    startCommand: "npm run start:prod"
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "5000"
+      # Set the following in the Render dashboard to your deployed domain or leave blank for same-origin
+      - key: FRONTEND_URL
+        value: "https://your-frontend-domain.onrender.com"
+      - key: BACKEND_URL
+        value: "https://your-backend-domain.onrender.com"
+    # Note: If you prefer to serve frontend + backend as separate services, create an additional static site/web service for the frontend
