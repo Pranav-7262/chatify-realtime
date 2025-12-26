@@ -29,7 +29,8 @@ export const useAuthStore = create((set, get) => ({
       try {
         useChatStore.getState().restoreSelectedFromLocalStorage();
       } catch (err) {
-        console.warn("restoreSelectedFromLocalStorage failed:", err);
+        // Non-fatal: local storage restore failed; use debug so it's not shown as a warning in production
+        console.debug("restoreSelectedFromLocalStorage failed:", err);
       }
     } catch {
       set({ authUser: null });

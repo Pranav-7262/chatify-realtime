@@ -4,6 +4,8 @@ A minimal full-stack real-time chat application built with Node, Express, Socket
 
 ---
 
+**Live demo:** https://chatify-realtime-kq98.onrender.com/
+
 ## 🧭 Project overview
 
 - **Backend:** Node.js, Express, Socket.io, MongoDB (via axios endpoints in frontend)

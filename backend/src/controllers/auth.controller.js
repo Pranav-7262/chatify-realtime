@@ -40,7 +40,8 @@ export const signup = async (req, res) => {
       res.status(400).json({ message: "Invalid user data" });
     }
   } catch (error) {
-    console.log("Error in Signup controller", error.message);
+    // Log full error (stack) for easier debugging
+    console.error("Signup controller error:", error);
     res.status(500).json({ message: "Server Error" });
   }
 };
@@ -67,7 +68,7 @@ export const login = async (req, res) => {
       profilePic: user.profilePic,
     });
   } catch (error) {
-    console.log("Error in Login controller", error.message);
+    console.error("Login controller error:", error);
     res.status(500).json({ message: "Server Error" });
   }
 };
@@ -84,7 +85,7 @@ export const logout = async (req, res) => {
 
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
-    console.log("Error in Logout controller", error.message);
+    console.error("Logout controller error:", error);
     res.status(500).json({ message: "Server Error" });
   }
 };
@@ -107,7 +108,7 @@ export const updateProfile = async (req, res) => {
       updatedUser, // return the updated user details
     });
   } catch (error) {
-    console.log("Error in Update Profile controller", error.message);
+    console.error("Update Profile controller error:", error);
     res.status(500).json({ message: "Server Error" });
   }
 };
@@ -116,7 +117,7 @@ export const checkAuth = (req, res) => {
   try {
     res.status(200).json(req.user);
   } catch (error) {
-    console.log("Error in checkAuth Profile controller", error.message);
+    console.error("checkAuth controller error:", error);
     res.status(500).json({ message: "Server Error" });
   }
 };

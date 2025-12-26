@@ -35,20 +35,26 @@ if (!loadedPath) {
   dotenv.config();
   loadedPath = "(default)";
 }
-console.log(
-  "Loaded environment from:",
-  loadedPath,
-  "NODE_ENV=",
-  process.env.NODE_ENV
-);
+// Avoid noisy logs in production; surface minimal environment info in development only
+if (process.env.NODE_ENV !== "production") {
+  console.info(
+    "Loaded environment from:",
+    loadedPath,
+    "NODE_ENV=",
+    process.env.NODE_ENV
+  );
+}
 
 const PORT = process.env.PORT || 5000;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${PORT}`;
 const __dirname = path.resolve();
 
-console.log(`FRONTEND_URL=${FRONTEND_URL}`);
-console.log(`BACKEND_URL=${BACKEND_URL}`);
+if (process.env.NODE_ENV !== "production") {
+  // Helpful for local debugging - removed in production to reduce noise
+  console.info(`FRONTEND_URL=${FRONTEND_URL}`);
+  console.info(`BACKEND_URL=${BACKEND_URL}`);
+}
 
 // security & performance middlewares
 // Configure Helmet with a Content Security Policy tailored for this app.
@@ -127,7 +133,8 @@ process.on("unhandledRejection", (reason) => {
 connectDB()
   .then(() => {
     server.listen(PORT, () => {
-      console.log(`Server is running on PORT ${PORT}`);
+      // Minimal startup info
+      console.info(`Server is running on PORT ${PORT}`);
     });
   })
   .catch((err) => {

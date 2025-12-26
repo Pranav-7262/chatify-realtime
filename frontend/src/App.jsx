@@ -16,13 +16,13 @@ const App = () => {
   const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
   const { theme } = useThemeStore();
 
-  console.log({ onlineUsers });
+  // Debug logs removed to avoid noisy console output in the browser
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  console.log({ authUser });
+  // authUser debug log removed
 
   if (isCheckingAuth && !authUser)
     return (

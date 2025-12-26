@@ -64,7 +64,8 @@ const seedDatabase = async () => {
     await connectDB();
 
     await User.insertMany(seedUsers);
-    console.log("Database seeded successfully");
+    // Informational: seeding success (useful when running this script locally)
+    console.info("Database seeded successfully");
   } catch (error) {
     console.error("Error seeding database:", error);
   }

@@ -156,7 +156,8 @@ export const useChatStore = create((set, get) => ({
       try {
         await get().getMessages(selectedUser._id);
       } catch (err) {
-        console.warn("getMessages failed:", err);
+        // Non-fatal: message retrieval failed, keep as debug to reduce console noise
+        console.debug("getMessages failed:", err);
       }
       // ensure one subscription
       get().unsubscribeFromMessages();
