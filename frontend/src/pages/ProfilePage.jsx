@@ -1,11 +1,14 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import { Camera, Mail, User } from "lucide-react";
+import { Camera, Mail, User, Check, Edit2, X } from "lucide-react";
 
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
   const [selectedImg, setSelectedImg] = useState(null);
+
+  // New State for editing text fields
+  const [isEditing, setIsEditing] = useState(false);
+  const [fullName, setFullName] = useState(authUser?.fullName || "");
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -21,7 +24,14 @@ const ProfilePage = () => {
     };
   };
 
-  // Prevent crash if authUser is null while refreshing
+  const handleUpdateName = async (e) => {
+    e.preventDefault();
+    if (fullName.trim() === authUser?.fullName) return setIsEditing(false);
+
+    await updateProfile({ fullName: fullName.trim() });
+    setIsEditing(false);
+  };
+
   if (!authUser)
     return (
       <div className="h-screen flex items-center justify-center">
@@ -50,15 +60,9 @@ const ProfilePage = () => {
               />
               <label
                 htmlFor="avatar-upload"
-                className={`
-                  absolute bottom-0 right-0 
-                  bg-primary hover:scale-110
-                  p-3 rounded-full cursor-pointer 
-                  transition-all duration-200 shadow-lg
-                  ${
-                    isUpdatingProfile ? "animate-pulse pointer-events-none" : ""
-                  }
-                `}
+                className={`absolute bottom-0 right-0 bg-primary hover:scale-110 p-3 rounded-full cursor-pointer transition-all duration-200 shadow-lg ${
+                  isUpdatingProfile ? "animate-pulse pointer-events-none" : ""
+                }`}
               >
                 <Camera className="w-5 h-5 text-primary-content" />
                 <input
@@ -77,15 +81,57 @@ const ProfilePage = () => {
           </div>
 
           {/* Info Section */}
-          <div className="grid gap-6">
+          <form onSubmit={handleUpdateName} className="grid gap-6">
             <div className="form-control w-full">
-              <label className="label">
+              <label className="label flex justify-between">
                 <span className="label-text text-base-content/50 flex items-center gap-2">
                   <User className="w-4 h-4" /> Full Name
                 </span>
+                {!isEditing && (
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(true)}
+                    className="text-xs text-primary hover:underline flex items-center gap-1"
+                  >
+                    <Edit2 size={12} /> Edit
+                  </button>
+                )}
               </label>
-              <div className="px-4 py-3 bg-base-200 rounded-xl border border-base-content/5 font-medium">
-                {authUser?.fullName}
+
+              <div className="relative flex items-center">
+                <input
+                  type="text"
+                  className={`w-full px-4 py-3 rounded-xl border border-base-content/5 font-medium transition-all ${
+                    isEditing
+                      ? "bg-base-100 border-primary focus:outline-none ring-2 ring-primary/20"
+                      : "bg-base-200 cursor-not-allowed"
+                  }`}
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  disabled={!isEditing || isUpdatingProfile}
+                />
+
+                {isEditing && (
+                  <div className="absolute right-2 flex gap-1">
+                    <button
+                      type="submit"
+                      className="btn btn-ghost btn-sm btn-circle text-success"
+                      disabled={isUpdatingProfile}
+                    >
+                      <Check size={18} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsEditing(false);
+                        setFullName(authUser.fullName);
+                      }}
+                      className="btn btn-ghost btn-sm btn-circle text-error"
+                    >
+                      <X size={18} />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -95,11 +141,14 @@ const ProfilePage = () => {
                   <Mail className="w-4 h-4" /> Email Address
                 </span>
               </label>
-              <div className="px-4 py-3 bg-base-200 rounded-xl border border-base-content/5 font-medium">
+              <div className="px-4 py-3 bg-base-200 rounded-xl border border-base-content/5 font-medium opacity-70">
                 {authUser?.email}
               </div>
+              <p className="text-[10px] text-base-content/40 mt-1 ml-1 italic">
+                Email address cannot be changed.
+              </p>
             </div>
-          </div>
+          </form>
 
           {/* Stats Section */}
           <div className="bg-base-200/50 rounded-2xl p-6 border border-base-content/5">
@@ -108,13 +157,7 @@ const ProfilePage = () => {
               <div className="flex items-center justify-between py-2 border-b border-base-content/10">
                 <span className="text-base-content/60">Member Since</span>
                 <span className="font-mono text-sm">
-                  {authUser?.createdAt ? (
-                    authUser.createdAt.split("T")[0]
-                  ) : (
-                    <span className="text-base-content/30 italic">
-                      Not available
-                    </span>
-                  )}
+                  {authUser?.createdAt?.split("T")[0] || "Not available"}
                 </span>
               </div>
               <div className="flex items-center justify-between text-sm py-2">

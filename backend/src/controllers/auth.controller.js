@@ -91,25 +91,43 @@ export const logout = async (req, res) => {
 };
 export const updateProfile = async (req, res) => {
   try {
-    const { profilePic } = req.body;
+    const { profilePic, fullName } = req.body; // Get both from body
     const userId = req.user._id;
-    if (!profilePic) {
-      return res.status(400).json({ message: "Profile picture is required" });
+
+    // Create an object to store fields we want to update
+    const updateData = {};
+
+    // 1. If fullName is provided, add it to update object
+    if (fullName) {
+      if (fullName.trim().length < 3) {
+        return res
+          .status(400)
+          .json({ message: "Full name must be at least 3 characters" });
+      }
+      updateData.fullName = fullName;
     }
 
-    const uploadResponse = await cloudinary.uploader.upload(profilePic);
+    // 2. If profilePic is provided, upload to Cloudinary and add to update object
+    if (profilePic) {
+      const uploadResponse = await cloudinary.uploader.upload(profilePic);
+      updateData.profilePic = uploadResponse.secure_url;
+    }
+
+    // 3. Check if there's actually anything to update
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({ message: "No data provided to update" });
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { profilePic: uploadResponse.secure_url }, //secure_url is the url of the uploaded image
+      updateData, // Pass the dynamic update object
       { new: true }
-    ); //here we get the updated user document , new : true returns the updated document
+    );
 
-    res.status(200).json({
-      updatedUser, // return the updated user details
-    });
+    res.status(200).json(updatedUser); // Return the updated document directly
   } catch (error) {
     console.error("Update Profile controller error:", error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
