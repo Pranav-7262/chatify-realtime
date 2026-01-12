@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import { Camera, Mail, User, Check, Edit2, X } from "lucide-react";
+import { Camera, Mail, User, Check, Edit2, X, Trash } from "lucide-react";
 
 const ProfilePage = () => {
-  const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
+  const { authUser, isUpdatingProfile, updateProfile, deleteUser } =
+    useAuthStore();
   const [selectedImg, setSelectedImg] = useState(null);
 
   // New State for editing text fields
@@ -38,7 +39,14 @@ const ProfilePage = () => {
         <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
 
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmText === "DELETE") {
+      await deleteUser();
+    }
+  };
   return (
     <div className="min-h-screen pt-20 bg-base-100">
       <div className="max-w-2xl mx-auto p-4 py-8">
@@ -168,6 +176,61 @@ const ProfilePage = () => {
                 </span>
               </div>
             </div>
+          </div>
+          {/* Danger Zone */}
+          <div className="mt-8 pt-6 border-t border-error/20">
+            {!showDeleteConfirm ? (
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
+                className="flex items-center gap-2 text-error hover:bg-error/10 px-4 py-2 rounded-lg transition-colors w-full justify-center font-medium"
+              >
+                <Trash className="w-4 h-4" />
+                Delete Account
+              </button>
+            ) : (
+              <div className="bg-error/5 border border-error/20 rounded-2xl p-6 space-y-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-error font-bold">
+                      Delete Permanent Account
+                    </h3>
+                    <p className="text-xs text-base-content/60 mt-1">
+                      This action is irreversible. All data will be wiped.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setShowDeleteConfirm(false);
+                      setDeleteConfirmText("");
+                    }}
+                    className="btn btn-ghost btn-xs btn-circle"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  <p className="text-sm">
+                    Type <span className="font-bold text-error">DELETE</span> to
+                    confirm:
+                  </p>
+                  <input
+                    type="text"
+                    placeholder="DELETE"
+                    className="input input-bordered input-error w-full bg-base-100"
+                    value={deleteConfirmText}
+                    onChange={(e) => setDeleteConfirmText(e.target.value)}
+                  />
+                  <button
+                    onClick={handleDeleteAccount}
+                    disabled={deleteConfirmText !== "DELETE"}
+                    className="btn btn-error w-full text-white disabled:opacity-50"
+                  >
+                    I understand, delete my account
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

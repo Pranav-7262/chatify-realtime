@@ -139,3 +139,18 @@ export const checkAuth = (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
+export const deleteUser = async (req, res) => {
+  const userId = req.user._id;
+  try {
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      console.log("Error: User not found to delete!");
+      return res.status(404).json({ message: "User not found" });
+    }
+    console.log("User deleted successfully!");
+    res.status(200).json({ message: "DELETED USER successfully" });
+  } catch (error) {
+    console.error("DeleteUser controller error:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};

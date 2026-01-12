@@ -17,6 +17,7 @@ export const useAuthStore = create((set, get) => ({
   isCheckingAuth: true, // it means we are checking auth status
   onlineUsers: [], // Placeholder for online users logic
   socket: null,
+  isDeletinguser: false,
 
   checkAuth: async () => {
     try {
@@ -110,6 +111,19 @@ export const useAuthStore = create((set, get) => ({
       set({ socket: null, onlineUsers: [] });
     } else {
       set({ socket: null, onlineUsers: [] });
+    }
+  },
+
+  deleteUser: async () => {
+    set({ isDeletinguser: true });
+    try {
+      const res = await axiosInstance.delete("/auth/delete-account");
+      set({ authUser: null });
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      toast.error(error.response?.data?.message);
+    } finally {
+      set({ isDeletinguser: false }); // end updating profile
     }
   },
 }));

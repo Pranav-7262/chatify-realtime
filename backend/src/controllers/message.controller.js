@@ -9,7 +9,9 @@ export const getUsersForSidebar = async (req, res) => {
     const loggedInUserId = req.user.id; // assuming protectRoute middleware adds user info to req
     const filteredUsers = await User.find({
       _id: { $ne: loggedInUserId },
-    }).select("-password"); // hre we are excluding password field
+    })
+      .select("-password")
+      .sort({ createdAt: -1 }); // hre we are excluding password field
     res.status(200).json(filteredUsers);
   } catch (error) {
     console.error("error in getUsersForSidebar ", error.message);
